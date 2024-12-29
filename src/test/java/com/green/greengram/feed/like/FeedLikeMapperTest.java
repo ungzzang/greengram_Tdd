@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*; //이안에있는 모든 stati
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //테스트는 기본적으로 메모리 데이터베이스 (H2)를 사용하는데 메모리 데이터베이스로 교체하지 않겠다.
 //즉, 우리가 원래 쓰는 데이터베이스로 테스트를 진행하겠다.
-@TestInstance(TestInstance.Lifecycle.PER_METHOD) //메소드마다 객체 하나생성
-class FeedLikeMapperTest {
+//@TestInstance(TestInstance.Lifecycle.PER_METHOD) //메소드마다 객체 하나생성
 
+class FeedLikeMapperTest {
     @Autowired //DI 시켜줌 //TODO: 스프링 컨테이너가 DI해주는게 맞는지 확인
     FeedLikeMapper feedLikeMapper; // 필드 주입 방식의 DI가 된다.
 
@@ -61,7 +61,7 @@ class FeedLikeMapperTest {
     void insFeedLikeDuplicateDataThrowDuplicateKeyException(){
         assertThrows(DuplicateKeyException.class, () -> {
             feedLikeMapper.insFeedLike(existedDate);
-        }, "데이터 중복시 에러 발생되지 않음 > primary key(feed_id");
+        }, "데이터 중복시 에러 발생되지 않음 > primary key(feed_id, user_id) 확인바람");
     }
 
     @Test

@@ -7,6 +7,7 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ class FeedPicMapperTest {
     void insFeedPicNullPicsThrowException() {
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(1L);
-        assertThrows(Exception.class, () -> {
+        assertThrows(MyBatisSystemException.class, () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
@@ -46,7 +47,7 @@ class FeedPicMapperTest {
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(1L);
         givenParam.setPics(new ArrayList<>());
-        assertThrows(Exception.class, () -> {
+        assertThrows(BadSqlGrammarException.class, () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
@@ -57,7 +58,7 @@ class FeedPicMapperTest {
         givenParam.setFeedId(1L);
         givenParam.setPics(new ArrayList<>(1));
         givenParam.getPics().add("_123456789_123456789_123456789_123456789_123456789_12");
-        assertThrows(MyBatisSystemException.class, () -> {
+        assertThrows(BadSqlGrammarException.class, () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
