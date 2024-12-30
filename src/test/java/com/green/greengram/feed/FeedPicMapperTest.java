@@ -1,30 +1,36 @@
 package com.green.greengram.feed;
 
+import com.green.greengram.feed.like.model.FeedPicVo;
 import com.green.greengram.feed.model.FeedPicDto;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.MyBatisSystemException;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles("test")
-@MybatisTest
+@ActiveProfiles("test") // yaml 저굥ㅇ되는 파일 선택 (application-test.yml)
+@MybatisTest // Mybatis Mapper Test 이기 때문에 작성 >> Mapper 들이 전부 객체화
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FeedPicMapperTest {
     @Autowired
     FeedPicMapper feedPicMapper;
 
+    @Autowired
+    FeedPicTestMapper feedPicTestMapper;
+
     @Test
-    void insFeedPicNoFeedIdThrowForeignKeyException() {
+    void insFeedPicNoFeedIdThrowException(){
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(10L);
-        givenParam.setPics(new ArrayList<>(1));
+        givenParam.setPics(new ArrayList<>());
         givenParam.getPics().add("a.jpg");
 
         assertThrows(DataIntegrityViolationException.class, () -> {
@@ -33,47 +39,63 @@ class FeedPicMapperTest {
     }
 
     @Test
-    void insFeedPicNullPicsThrowException() {
+    void insFeedPicNullPicsThrowException () {
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(1L);
+
         assertThrows(Exception.class, () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
-
     @Test
-    void insFeedPicNoPicThrowException() {
+    void insFeedPicNoPicThrowException () {
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(1L);
         givenParam.setPics(new ArrayList<>());
-        assertThrows(Exception.class, () -> {
+        assertThrows(BadSqlGrammarException.class, () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
-
     @Test
-    void insFeedPic_PicStringLengthMoreThanThrow50_ThrowException() {
+    void insFeedPic_PicStringLengthMoreThan50_ThrowException (){
         FeedPicDto givenParam = new FeedPicDto();
         givenParam.setFeedId(1L);
         givenParam.setPics(new ArrayList<>(1));
-        givenParam.getPics().add("_123456789_123456789_123456789_123456789_123456789_12");
-        assertThrows(MyBatisSystemException.class, () -> {
+        givenParam.getPics().add("56848964165489643165468_568489413216846135165.jpg");
+
+        assertThrows(BadSqlGrammarException.class , () -> {
             feedPicMapper.insFeedPic(givenParam);
         });
     }
 
     @Test
-    void insFeedPic() {
-        String[] pics = { "a.jpg", "b.jpg", "c.jpg" };
+    void insFeedPic(){
+        String[] pics = {"a.jpg" , "b.jpg" , "c.jpg"};
         FeedPicDto givenParam = new FeedPicDto();
-        givenParam.setFeedId(1L);
+        givenParam.setFeedId(5L);
         givenParam.setPics(new ArrayList<>(pics.length));
-        for(String pic : pics){
+        for (String pic : pics){
             givenParam.getPics().add(pic);
         }
+        List<FeedPicVo> feedPicListBefore = feedPicTestMapper.selFeedPicListByFeedId(givenParam.getFeedId());
         int actualAffectedRows = feedPicMapper.insFeedPic(givenParam);
+        List<FeedPicVo> feedPicListAfter = feedPicTestMapper.selFeedPicListByFeedId(givenParam.getFeedId());
 
-        assertEquals(givenParam.getPics().size(), actualAffectedRows);
+        List<String> picList = Arrays.asList(pics);
+        for(int i = 0; i < pics.length; i++) {
+            String pic = picList.get(i);
+            System.out.printf("%s - contains: %b\n", pic, feedPicListAfter.contains(pic));
+        } //보여주기용으로 만들어서 없어도 됨.
+        assertAll(
+                  () -> {
+
+                  }
+                , () -> assertEquals(givenParam.getPics().size(), actualAffectedRows)
+                , () -> assertEquals(0, feedPicListBefore.size())
+                , () -> assertEquals(givenParam.getPics().size(), feedPicListAfter.size())
+                , () -> assertTrue(feedPicListAfter.containsAll(Arrays.asList(pics)))
+        );
+
+        //created_at 단언
     }
-
 }
