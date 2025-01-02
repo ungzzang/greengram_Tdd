@@ -8,6 +8,6 @@ import org.springframework.validation.annotation.Validated;
 @Mapper
 @Validated
 public interface FeedLikeMapper {
-    int insFeedLike(FeedLikeReq p);
+    int insFeedLike(@Valid FeedLikeReq p);
     int delFeedLike(@Valid FeedLikeReq p);
 }

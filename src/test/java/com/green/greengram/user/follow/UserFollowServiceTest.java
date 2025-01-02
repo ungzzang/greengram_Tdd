@@ -14,15 +14,16 @@ import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 //Spring Test Context (컨테이너) 이용하는거 아니다.
+//서비스에서 테스트는 스프링 필요없다.
 @ExtendWith(MockitoExtension.class)
 class UserFollowServiceTest {
     @InjectMocks //시제품을 인젝트하겠다.
     UserFollowService userFollowService; //Mockito가 객체화를 직접 한다.
 
-    @Mock
+    @Mock //가짜(시제품)
     UserFollowMapper userFollowMapper;
 
-    @Mock
+    @Mock //가짜(시제품)
     AuthenticationFacade authenticationFacade;
 
 
@@ -42,15 +43,17 @@ class UserFollowServiceTest {
         //given
         //authenticationFacade Mock객체의 getSignedUserId()메소드를 호출하면 willReturn값이 리턴이 되게끔 세팅
         final int EXPECTED_RESULT = 13;
-        given(authenticationFacade.getSignedUserId()).willReturn(fromUserId1); //authenticationFacade.getSignedUserId()이거 호출되면 1(fromUserId1)을 리턴하라
+        final long EXPECTED_FROM_USER_ID = fromUserId3;
+        final long EXPECTED_TO_USER_ID = toUserId4;
+        given(authenticationFacade.getSignedUserId()).willReturn(EXPECTED_FROM_USER_ID); //authenticationFacade.getSignedUserId()이거 호출되면 1(fromUserId1)을 리턴하라
 
-        UserFollowReq givenParam1_2 = new UserFollowReq(toUserId2);
-        givenParam1_2.setFromUserId(fromUserId1);
-        given(userFollowMapper.postUserFollow(givenParam1_2)).willReturn(1);
+        UserFollowReq givenParam = new UserFollowReq(EXPECTED_TO_USER_ID);
+        givenParam.setFromUserId(EXPECTED_FROM_USER_ID);
+        given(userFollowMapper.postUserFollow(givenParam)).willReturn(EXPECTED_RESULT);
 
         //when
-        UserFollowReq actualParam0_2 = new UserFollowReq(toUserId2);
-        int actualResult = userFollowService.postUserFollow(actualParam0_2);
+        UserFollowReq actualParam = new UserFollowReq(EXPECTED_TO_USER_ID);
+        int actualResult = userFollowService.postUserFollow(actualParam);
 
         //then
         assertEquals(EXPECTED_RESULT, actualResult); //둘값이 맞는지 확인

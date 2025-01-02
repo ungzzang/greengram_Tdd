@@ -54,6 +54,7 @@ public class FeedService {
         String middlePath = String.format("feed/%d",feedId);
         myFileUtils.makeFolders(middlePath);
 
+
         //랜덤 파일명 저장용 >> feed_pics 테이블에 저장할 때 사용
         List<String> picNameList = new ArrayList<>(pics.size()); //pics.size()없어도 결과는 같음
 
@@ -78,8 +79,8 @@ public class FeedService {
         int resultPics = feedPicsMapper.insFeedPic(feedPicDto); //버전2에서는 for문 밖에서 한번만 쿼리문 호출함(이게 더 효율이 좋음), 그래서 xml에서 foreach사용했다
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>resultPics : {}", resultPics); // 사진갯수
 
-        //@Setter 사용했을때
-        /*FeedPostRes res = new FeedPostRes();
+        /*//@Setter 사용했을때
+        FeedPostRes res = new FeedPostRes();
         res.setFeedId(feedId);
         res.setPics(picNameList);*/
 
