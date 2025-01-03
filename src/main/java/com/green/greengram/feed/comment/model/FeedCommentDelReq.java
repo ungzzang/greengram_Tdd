@@ -2,6 +2,7 @@ package com.green.greengram.feed.comment.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -9,6 +10,7 @@ import java.beans.ConstructorProperties;
 
 @ToString
 @Getter
+@EqualsAndHashCode
 public class FeedCommentDelReq {
     @Schema(name = "feed_comment_id") //프론트한테 이 이름으로 날린다는거 알리기
     private long feedCommentId;

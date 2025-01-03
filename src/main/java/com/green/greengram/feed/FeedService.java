@@ -9,6 +9,7 @@ import com.green.greengram.feed.comment.model.FeedCommentDto;
 import com.green.greengram.feed.comment.model.FeedCommentGetReq;
 import com.green.greengram.feed.comment.model.FeedCommentGetRes;
 import com.green.greengram.feed.model.*;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class FeedService {
     private final FeedMapper feedMapper;
     private final FeedPicMapper feedPicsMapper;
@@ -77,7 +79,7 @@ public class FeedService {
         feedPicDto.setFeedId(feedId);
         feedPicDto.setPics(picNameList);//리스트에 담은 사진들을 통째로 넘긴다. ver1에서는 for문으로 사진하나하나 집어넣음.
         int resultPics = feedPicsMapper.insFeedPic(feedPicDto); //버전2에서는 for문 밖에서 한번만 쿼리문 호출함(이게 더 효율이 좋음), 그래서 xml에서 foreach사용했다
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>resultPics : {}", resultPics); // 사진갯수
+        log.info(">>>>>resultPics : {}", resultPics); // 사진갯수
 
         /*//@Setter 사용했을때
         FeedPostRes res = new FeedPostRes();

@@ -2,12 +2,14 @@ package com.green.greengram.feed.comment.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Schema(title = "피드 댓글 등록 요청")
+@EqualsAndHashCode
 public class FeedCommentPostReq { //누가 어느 피드에 어떤 코멘트를 담았는지
     @JsonIgnore
     private long feedCommentId; //pk값 갖기위한 용도

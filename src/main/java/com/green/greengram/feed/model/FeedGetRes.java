@@ -3,10 +3,7 @@ package com.green.greengram.feed.model;
 import com.green.greengram.feed.comment.model.FeedCommentDto;
 import com.green.greengram.feed.comment.model.FeedCommentGetRes;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import java.util.List;
 @ToString
 @Schema(title = "피드 정보")
 @NoArgsConstructor //기본생성자 만들어줌
+@EqualsAndHashCode
 public class FeedGetRes {
         @Schema(title = "피드 PK")
         private long feedId;

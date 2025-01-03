@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.greengram.common.model.Paging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Positive;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.BindParam;
 
 @Slf4j
 @Getter
+@EqualsAndHashCode
 //@ToStirng: FeedGetReq의 ToString 메소드를 오버라이딩한다.
 @ToString(callSuper = true) //부모가 있는 값도 ToString으로 찍히게 해줌
 public class FeedGetReq extends Paging {

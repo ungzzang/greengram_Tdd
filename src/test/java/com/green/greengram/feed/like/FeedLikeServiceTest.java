@@ -41,7 +41,7 @@ class FeedLikeServiceTest {
         FeedLikeReq givenParam = new FeedLikeReq();
         givenParam.setUserId(SIGNED_USER_ID_3);
         givenParam.setFeedId(FEED_ID_8);
-        given(feedLikeMapper.delFeedLike(givenParam)).willReturn(0);
+        given(feedLikeMapper.delFeedLike(givenParam)).willReturn(0); //given 아예 안주면 디폴트값이 리턴된다.
         given(feedLikeMapper.insFeedLike(givenParam)).willReturn(1);
 
         FeedLikeReq actualParam = new FeedLikeReq();
